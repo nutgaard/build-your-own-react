@@ -1,14 +1,25 @@
+import {ClassComponent, Component, ReactElement, FunctionComponent, ComponentType} from '../../react';
 import { instantiateVNode } from './index';
 import VDomNode from './VDomNode';
 
 export default class VCompositeNode {
-    static isReactClassComponent(type) {
+    static isReactClassComponent(type: ComponentType): type is ClassComponent {
+        if (typeof type === 'string') {
+            return false;
+        }
         return type.prototype && type.prototype.isReactComponent;
     }
+    static isReactFunctionComponent(type: ComponentType): type is FunctionComponent {
+        return !this.isReactClassComponent(type) && typeof type === 'function';
+    }
 
-    static isVCompositeNode(type) {
+    static isVCompositeNode(type): boolean {
         return typeof type === 'function';
     }
+
+    private currentReactElement: ReactElement;
+    private classInstance: Component;
+    private renderedInstance: VDomNode | VCompositeNode;
 
     constructor(reactElement) {
         this.currentReactElement = reactElement;
@@ -16,19 +27,19 @@ export default class VCompositeNode {
         this.renderedInstance = null;
     }
 
-    getPublicInstance() {
+    getPublicInstance(): Component {
         return this.classInstance;
     }
 
-    getCurrentReactElement() {
+    getCurrentReactElement(): ReactElement {
         return this.currentReactElement;
     }
 
-    getDomNode() {
+    getDomNode(): HTMLElement | Text {
         return this.renderedInstance.getDomNode();
     }
 
-    update(nextReactElement) {
+    update(nextReactElement): void {
         const {
             type,
             props: nextProps,
@@ -60,7 +71,7 @@ export default class VCompositeNode {
         }
     }
 
-    mount() {
+    mount(): HTMLElement | Text {
         const {
             type,
             props,
@@ -69,7 +80,7 @@ export default class VCompositeNode {
         if (VCompositeNode.isReactClassComponent(type)) {
             this.classInstance = new type(props);
             this.renderedInstance = instantiateVNode(this.classInstance.render());
-        } else {
+        } else if (VCompositeNode.isReactFunctionComponent(type)) {
             this.classInstance = null;
             this.renderedInstance = instantiateVNode(type(props));
         }

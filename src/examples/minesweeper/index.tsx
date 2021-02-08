@@ -1,9 +1,15 @@
 import React from '../react';
 import ReactDOM from '../react-dom';
-
 import Game from './components/Game';
+import {ReactElement} from "../../react";
 
-class MineSweeperApp extends React.Component {
+interface State {
+    rows: number;
+    columns: number;
+    mines: number;
+    game: ReactElement
+}
+class MineSweeperApp extends React.Component<{}, State> {
     constructor() {
         super();
         this.state = {

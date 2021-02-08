@@ -1,24 +1,34 @@
 import { instantiateVNode } from './index';
+import {Component, ClassComponent, FunctionComponent, ReactElement, ComponentType} from "../../react";
 
 export default class VCompositeNode {
-    static isReactClassComponent(type) {
-        return type.prototype && type.prototype.isReactComponent;
+    static isReactClassComponent(type: ComponentType): type is ClassComponent {
+        if (typeof type === 'string') {
+            return false;
+        }
+        return type && type.prototype && type.prototype.isReactComponent;
+    }
+    static isFunctionComponent(type: ComponentType): type is FunctionComponent {
+        return !this.isReactClassComponent(type) && typeof type === 'function';
     }
 
-    static isVCompositeNode(type) {
+    static isVCompositeNode(type: ComponentType): boolean {
         return typeof type === 'function';
     }
 
-    constructor(reactElement) {
+    private currentReactElement: ReactElement;
+    private classInstance: Component;
+
+    constructor(reactElement: ReactElement) {
         this.currentReactElement = reactElement;
         this.classInstance = null;
     }
 
-    getPublicInstance() {
+    getPublicInstance(): Component {
         return this.classInstance;
     }
 
-    mount(classCache) {
+    mount(classCache): HTMLElement {
         const {
             type,
             props,
@@ -36,7 +46,7 @@ export default class VCompositeNode {
 
             renderedInstance = instantiateVNode(instance.render());
             this.classInstance = instance;
-        } else {
+        } else if (VCompositeNode.isFunctionComponent(type)) {
             renderedInstance = instantiateVNode(type(props));
             this.classInstance = null;
         }

@@ -1,13 +1,19 @@
 import VCompositeNode from './VCompositeNode';
 import VDomNode from './VDomNode';
+import {Component, ReactElement} from "../../react";
 
-const root = {};
+interface Root {
+    reactElement?: ReactElement;
+    domContainerNode?: HTMLElement;
+}
+const root: Root = {};
 const classCache = {
     index: -1,
     cache: []
 };
 
-export function instantiateVNode(reactElement) {
+export type VNode = VCompositeNode | VDomNode;
+export function instantiateVNode(reactElement: ReactElement): VNode {
     const { type } = reactElement || {};
 
     if (VCompositeNode.isVCompositeNode(type)) {
@@ -20,21 +26,19 @@ export function instantiateVNode(reactElement) {
 function render(
     reactElement = root.reactElement,
     domContainerNode = root.domContainerNode
-) {
+): void {
     if (root.domContainerNode) {
         domContainerNode.innerHTML = '';
         classCache.index = -1;
     }
 
-    const vNode = instantiateVNode(reactElement);
-    const domNode = vNode.mount(classCache);
+    const vNode: VNode = instantiateVNode(reactElement);
+    const domNode: HTMLElement = vNode.mount(classCache);
 
     domContainerNode.appendChild(domNode);
 
     root.reactElement = reactElement;
     root.domContainerNode = domContainerNode;
-
-    return vNode.getPublicInstance();
 }
 
 export default {

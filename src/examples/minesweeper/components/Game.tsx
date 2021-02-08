@@ -1,7 +1,25 @@
 import React from '../../react';
 import Board from './Board';
 
-class Game extends React.Component {
+interface Props {
+    rows: number;
+    columns: number;
+    mines: number;
+}
+
+interface State {
+    isGameOver: boolean;
+    isGameWon: boolean;
+    remainingFlags: number;
+    displayedSquares: Array<Array<null | '' | 'f' | 'm'>>;
+}
+
+class Game extends React.Component<Props, State> {
+    rows: number;
+    columns: number;
+    minesNumber: number;
+    squaresValues: null | Array<Array<number>>;
+
     constructor(props) {
         super(props);
 
@@ -45,13 +63,13 @@ class Game extends React.Component {
             var index = Math.floor(Math.random() * totalSquaresNumber); // returns a number between 0 and number of squares
             if (
                 this.squaresValues[Math.floor(index / this.columns)][
-                    index % this.columns
-                ] === 0
+                index % this.columns
+                    ] === 0
             ) {
                 //square does not have a mine already
                 this.squaresValues[Math.floor(index / this.columns)][
-                    index % this.columns
-                ] = 10; //10 value will represent a mine
+                index % this.columns
+                    ] = 10; //10 value will represent a mine
                 minesOnBoard++;
             }
         }
@@ -112,13 +130,13 @@ class Game extends React.Component {
         //Check if location has already been clicked (
         else if (this.state.displayedSquares[rowIndex][columnIndex] !== null) {
         }
-        //Do nothing
+            //Do nothing
 
         //Check if user clicked on mine
         else if (this.squaresValues[rowIndex][columnIndex] === 10) {
             this.addToDisplayedSquares(rowIndex, columnIndex, 'm');
 
-            this.setState({ isGameOver: true });
+            this.setState({isGameOver: true});
 
             this.gameOver();
         }
@@ -140,8 +158,8 @@ class Game extends React.Component {
         var t1 = performance.now();
         console.log(
             'Call to set state displayedSquares took ' +
-                (t1 - t0) +
-                ' milliseconds.'
+            (t1 - t0) +
+            ' milliseconds.'
         );
     }
 
@@ -225,11 +243,11 @@ class Game extends React.Component {
                 {
                     remainingFlags: this.state.remainingFlags - 1
                 },
-                function() {
+                function () {
                     if (this.state.remainingFlags === 0) {
                         var isGameWon = this.IsGameWon();
                         if (isGameWon === true) {
-                            this.setState({ isGameWon: true });
+                            this.setState({isGameWon: true});
                         }
                     }
                 }
@@ -269,42 +287,42 @@ class Game extends React.Component {
 
         return React.createElement(
             'div',
-            { className: 'game', style: { maxWidth: boardWidth } },
+            {className: 'game', style: {maxWidth: boardWidth}},
             React.createElement(
                 'div',
-                { className: 'boardHeader' },
+                {className: 'boardHeader'},
                 React.createElement(
                     'h4',
-                    { className: 'title' },
+                    {className: 'title'},
                     React.createElement(
                         'span',
-                        { style: { color: '#DD93BD' } },
+                        {style: {color: '#DD93BD'}},
                         'M'
                     ),
                     React.createElement(
                         'span',
-                        { style: { color: '#ff7c80' } },
+                        {style: {color: '#ff7c80'}},
                         'i'
                     ),
                     React.createElement(
                         'span',
-                        { style: { color: '#F132FF' } },
+                        {style: {color: '#F132FF'}},
                         'n'
                     ),
                     React.createElement(
                         'span',
-                        { style: { color: '#fbd4b4' } },
+                        {style: {color: '#fbd4b4'}},
                         'e'
                     ),
                     React.createElement(
                         'span',
-                        { id: 'SweeperHeader' },
+                        {id: 'SweeperHeader'},
                         ' Sweeper '
                     )
                 ),
                 React.createElement(
                     'div',
-                    { className: 'flags-information' },
+                    {className: 'flags-information'},
                     React.createElement('h1', null, this.state.remainingFlags),
                     React.createElement('img', {
                         src:

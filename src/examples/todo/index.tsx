@@ -1,7 +1,7 @@
 import React from '../react';
 import ReactDOM from '../react-dom';
 
-class TodoForm extends React.Component {
+class TodoForm extends React.Component<{ addTodo: (value: string) => void }, {value: string}> {
     constructor(props) {
         super(props);
 
@@ -38,7 +38,7 @@ class TodoForm extends React.Component {
     }
 }
 
-class TodoApp extends React.Component {
+class TodoApp extends React.Component<{}, { todos: Array<any> }> {
     constructor(props) {
         super(props);
 

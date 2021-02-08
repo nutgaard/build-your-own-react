@@ -75,7 +75,7 @@ Note that these test scripts will also run the tests for all the previous tasks.
 
 ### Playground
 
-In addition to the tests, you can edit `src/index.js` to play with your implementation.
+In addition to the tests, you can edit `src/index.tsx` to play with your implementation.
 
 To run the code:
 
@@ -108,8 +108,8 @@ If you've already looked in the `/react-dom` directory or `/react` directory, yo
 are not empty.
 We've taken the liberty of implementing a skeleton for you of empty functions that are to be implemented.
 
-To stay true to the virtual-DOM mindset you will find `VCompositeNode.js` and `VDomNode.js` in the `react-dom`
-directory. `VDomNode.js` is a "virtual" DOM-node, while the `VCompositeNode` represents a "virtual" react-component node.
+To stay true to the virtual-DOM mindset you will find `VCompositeNode.ts` and `VDomNode.ts` in the `react-dom`
+directory. `VDomNode.ts` is a "virtual" DOM-node, while the `VCompositeNode` represents a "virtual" react-component node.
 Everything that can be represented in the DOM, such as a `number`, `string`, `div`, `a`, `p` etc. should be a
 `VDomNode`. Everything else, and by that we mean stateful- or stateless-components should be a `VCompositeNode`.
 
@@ -168,7 +168,7 @@ The function returns an object like the one below.
 }
 ```
 
-:trophy: Implement the `createElement` function in the file named `react/index.js`
+:trophy: Implement the `createElement` function in the file named `react/index.tsx`
 
 :bulb: Unfamiliar with `React.createElement()`? Code written with [JSX](https://reactjs.org/docs/introducing-jsx.html) will be converted to use React.createElement(). You will not typically invoke React.createElement() directly if you are using JSX.
 
@@ -209,7 +209,7 @@ ReactDOM.render(
 
 To complete our task, we need to:
 
-1. return a `new VDomNode(reactElement)` from the `instantiateVNode` function in `react-dom/index.js`.
+1. return a `new VDomNode(reactElement)` from the `instantiateVNode` function in `react-dom/index.tsx`.
 
 2. In `render`, we instansite our virtual node with our reactElement by calling `instantiateVNode(reactElement)`. Store it in a variable named `vNode`.
 
@@ -236,7 +236,7 @@ Remember to also implement the `constructor` and `mount` in `VDomNode`:
 
 Great, we are now able to create **one** HTML element! In order to render more than one element we need to handle children.
 
-To do so we have to extend the `mount()` function in `VDomNode.js` to iterate over possible children:
+To do so we have to extend the `mount()` function in `VDomNode.ts` to iterate over possible children:
 
 The following call to `ReactDOM.render()`..
 
@@ -257,7 +257,7 @@ ReactDOM.render(
 </div>
 ```
 
-:trophy: Extend the `mount` function in `VDomNode.js` to support children.
+:trophy: Extend the `mount` function in `VDomNode.ts` to support children.
 
 1. Get `props.children` of the `reactElement` and map the children to `instantiateVNode`, which will create virtual
    DOM-nodes.
@@ -369,14 +369,14 @@ ReactDOM.render(element, document.getElementById('root'));
 
 In the above example the prop "name" is set as a JSX attribute. React passes all JSX attributes to our user-defined component in a single object.
 
-:trophy: Extend `react-dom/index.js` and `VCompositeNode.js` to handle functional components.
+:trophy: Extend `react-dom/index.tsx` and `VCompositeNode.ts` to handle functional components.
 
 To get functional components working, you should:
 
-1. Extend `instantiateVNode` in `react-dom/index.js` to be able to instantiate a `VCompositeNode`.
+1. Extend `instantiateVNode` in `react-dom/index.tsx` to be able to instantiate a `VCompositeNode`.
    To do this, just check if the `type` attribute of `reactElement` is a `function` (use `typeof`).
 
-You also need to implement `VCompositeNode.js`:
+You also need to implement `VCompositeNode.ts`:
 
 2. The `constructor` needs to set the `reactElement`-argument as a class-property. Just like we did for `VDomNode` in task 2.
 
@@ -398,7 +398,7 @@ No application is complete without styling. In React there is mainly two ways to
 
 To specify a CSS class of an element, use the `className` attribute. This is one of the JSX attributes (`props`) that are reserved by React. It is used to set the [class attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/class) of the specific element.
 
-:trophy: Implement support for the `className` attribute in `VDomNode.js`
+:trophy: Implement support for the `className` attribute in `VDomNode.ts`
 
 :bulb: You can use the [className](https://developer.mozilla.org/en-US/docs/Web/API/Element/className) property of the Element interface to set the value of the class attribute of a specific HTML element.
 
@@ -410,7 +410,7 @@ Inline styling is another way to style your application. The `style` attribute a
 
 > This is different from HTML where the [style attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/style) accepts a CSS-string.
 
-:trophy: Implement support for the `style` attribute in `VDomNode.js`
+:trophy: Implement support for the `style` attribute in `VDomNode.ts`
 
 :bulb: You can use the [style](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/style) property of the HTMLElement to set the style attribute of a specific HTML element.
 
@@ -460,7 +460,7 @@ const Button = () => (
 
 > When using React you should generally not need to call `addEventListener` to add listeners to a DOM element after it is created.
 
-:trophy: Use `addEventListener()` to add event listeners in `VDomNode.js` for each of the attributes that start with 
+:trophy: Use `addEventListener()` to add event listeners in `VDomNode.ts` for each of the attributes that start with 
 `on`.
 
 :bulb: You can use the following regex to find strings that start with `on`:
@@ -513,7 +513,7 @@ But still, using class components in our implementation of React does not work p
 :trophy: As mentioned, the `render`-function is used to specify what to render. It is the only required method in a 
 class component and should return [React elements](#react-elements).
 To enforce that all classes that extend the `Component` class implements the `render`, let the 
-`render` function in `react/Component.js` throw an [Error](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error).
+`render` function in `react/Component.ts` throw an [Error](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error).
 
 :trophy: We need to treat functional and class components differently. In contrast to functional components, we need 
 to call the `render`-method to determine the React elements to render. 
@@ -521,7 +521,7 @@ To do this we need to know if a component is a functional or class component.
 Since [JavaScript classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes) in fact are functions,
 we can not use the type of the variable to determine it. Instead add a simple flag as a
 [prototype data value](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/prototype)
-to our `react/Component.js`.
+to our `react/Component.ts`.
 
 ```js
 Component.prototype.isReactComponent = true;
@@ -583,7 +583,7 @@ class Greeting extends React.Component {
 Strictly speaking your component now just has a property `state`, it doesn't really _have_ state.
 As you may know, in React you can use `this.setState()` to change this property, and finally make your component stateful.
 
-:trophy: Implement `setState` in `react/Component.js`.
+:trophy: Implement `setState` in `react/Component.ts`.
 The argument of `setState` is expected to be an object, and it should be merged to the existing state.
 If it is `undefined` or `null` you should simply do nothing - just return from the function.
 
@@ -624,7 +624,7 @@ The reason for this is that we are new'ing up components on every render instead
 class-components in memory.
 To fix this, we are going to implement a class-cache that saves our component instances between renders..
 
-1. Add the `classCache` to `react-dom/index.js`:
+1. Add the `classCache` to `react-dom/index.tsx`:
 
 ```js
 const classCache = {
@@ -633,7 +633,7 @@ const classCache = {
 };
 ```
 
-2. Call `mount` on the virtual node returned by `instantiateVNode` in `react-dom/index.js` with the cache as the 
+2. Call `mount` on the virtual node returned by `instantiateVNode` in `react-dom/index.tsx` with the cache as the 
 argument.
 
 3. For `mount` in `VDomNode` you basically just need to pass on the cache to the next call to `mount`.
@@ -643,7 +643,7 @@ cache-index property and get the element at that index. If the element is define
 if not, instantiate the class-component as we did before. Remember to push the class instance back into the
 cache before you are done.
 
-5. When re-render, you first need to reset the cache index and remove all contents in `domContainerNode` in `react-dom/index.js`.
+5. When re-render, you first need to reset the cache index and remove all contents in `domContainerNode` in `react-dom/index.tsx`.
 
 :running: Finally, for the last time, run the tests `npm run test13`.
 

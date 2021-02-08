@@ -1,8 +1,8 @@
 import React from '../react';
 import '../test-utils';
 
-class Greeting extends React.Component {
-  constructor(props) {
+class Greeting extends React.Component<{}, { name: string; moreState: string; }> {
+  constructor(props: any = null) {
     super(props);
     this.state = { name: 'world', moreState: 'right here' };
   }

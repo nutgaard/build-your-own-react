@@ -1,10 +1,22 @@
 import VCompositeNode from './VCompositeNode';
 import VDomNode from './VDomNode';
+import {ReactElement} from '../../react';
 
-const root = {};
+declare global {
+    interface ChildNode {
+        _vNode: any;
+    }
+}
 
-export function instantiateVNode(reactElement) {
-    const { type } = reactElement || {};
+interface Root {
+    reactElement?: ReactElement;
+    domContainerNode?: HTMLElement;
+}
+
+const root: Root = {};
+type VNode = VCompositeNode | VDomNode;
+export function instantiateVNode(reactElement: ReactElement): VNode {
+    const {type} = reactElement || {};
 
     if (VCompositeNode.isVCompositeNode(type)) {
         return new VCompositeNode(reactElement);
@@ -14,11 +26,11 @@ export function instantiateVNode(reactElement) {
 }
 
 function render(
-    reactElement = root.reactElement,
-    domContainerNode = root.domContainerNode || {}
-) {
+    reactElement: ReactElement = root.reactElement,
+    domContainerNode: HTMLElement = root.domContainerNode
+): void {
     if (domContainerNode.firstChild) {
-        const prevVNode =  domContainerNode.firstChild._vNode;
+        const prevVNode = domContainerNode.firstChild._vNode;
         const prevReactElement = prevVNode.getCurrentReactElement();
 
         if (prevReactElement.type === reactElement.type) {
@@ -38,8 +50,6 @@ function render(
 
     root.reactElement = reactElement;
     root.domContainerNode = domContainerNode;
-
-    return vNode.getPublicInstance();
 }
 
 export default {

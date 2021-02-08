@@ -1,10 +1,10 @@
-import { getNodeText, fireEvent, waitFor } from '@testing-library/dom';
+import {fireEvent, getNodeText, waitFor} from '@testing-library/dom';
 
 import React from '../react';
 import ReactDOM from '../react-dom';
 import { getExampleDOM } from '../test-utils';
 
-class Greeting extends React.Component {
+class Greeting extends React.Component<{ newState: { name: string }; }, { name: string; }> {
   constructor(props) {
     super(props);
     this.state = { name: 'world' };

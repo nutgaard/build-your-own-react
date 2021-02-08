@@ -1,3 +1,4 @@
+import { ReactElement } from '../../react';
 import { instantiateVNode } from './index';
 
 export default class VDomNode {
@@ -15,7 +16,7 @@ export default class VDomNode {
         return !Array.isArray(children) ? [children] : children;
     }
 
-    static setAttributes(domNode, props = {}) {
+    static setAttributes(domNode, props:any = {}) {
         const {
             className,
             style,
@@ -70,16 +71,19 @@ export default class VDomNode {
         return domNode;
     }
 
+    private currentReactElement: ReactElement;
+    private domNode: HTMLElement;
+
     constructor(reactElement) {
         this.currentReactElement = reactElement;
         this.domNode = null;
     }
 
-    getPublicInstance() {
+    getPublicInstance(): HTMLElement {
         return this.domNode;
     }
 
-    mount(classCache) {
+    mount(classCache): HTMLElement {
         const { props } = this.currentReactElement || {};
 
         this.domNode = VDomNode.buildDomNode(this.currentReactElement);

@@ -1,7 +1,15 @@
 import React from '../../react';
 import Square from './Square';
 
-class Board extends React.Component {
+interface Props  {
+    isGameOver: boolean;
+    isGameWon: boolean;
+    displayedSquares: Array<Array<null | '' | 'f' | 'm'>>;
+    columnsNumber: number;
+    rowsNumber: number;
+    onClick(e: Event, columnIndex: number, rowIndex: number): void;
+}
+class Board extends React.Component<Props> {
     getBorderColor(displayValue) {
         var borderColor = '#E3E3E3';
 
@@ -47,7 +55,6 @@ class Board extends React.Component {
         } else if (displayValue !== null) {
             fillColor = '#f4f4f4';
         }
-
         return fillColor;
     }
 

@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/extend-expect';
 import regeneratorRuntime from 'regenerator-runtime';
-import './polyfill';
+// import './polyfill';
 
 export function getExampleDOM() {
   const div = document.createElement('div');

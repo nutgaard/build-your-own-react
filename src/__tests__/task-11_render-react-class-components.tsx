@@ -4,7 +4,7 @@ import React from '../react';
 import ReactDOM from '../react-dom';
 import { getExampleDOM } from '../test-utils';
 
-class GreetingWithProps extends React.Component {
+class GreetingWithProps extends React.Component<{ name: string; }> {
   render() {
     const { name } = this.props;
     return <p>Hello {name}</p>;
@@ -14,7 +14,7 @@ class GreetingWithProps extends React.Component {
 test('Check that class components render', async () => {
   const container = getExampleDOM();
 
-  ReactDOM.render(<GreetingWithProps name='world' />, container);
+  ReactDOM.render(<GreetingWithProps name={"world"} />, container);
 
   expect(getNodeText(container.querySelector('p'))).toBe('Hello world');
 });

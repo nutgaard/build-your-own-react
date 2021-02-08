@@ -1,25 +1,27 @@
 import { instantiateVNode } from './index';
+import {ReactElement} from "../../react";
+import VCompositeNode from "./VCompositeNode";
 
 export default class VDomNode {
-    static isTypeDefined(reactElement) {
-        return !VDomNode.isEmpty(reactElement) && reactElement.type;
+    static isTypeDefined(reactElement: ReactElement): boolean {
+        return !VDomNode.isEmpty(reactElement) && !!reactElement.type;
     }
 
-    static isEmpty(reactElement) {
+    static isEmpty(reactElement: ReactElement): boolean {
         return reactElement === undefined || reactElement === null;
     }
 
-    static isPrimitive(reactElement) {
+    static isPrimitive(reactElement: any): reactElement is string {
         return !reactElement.type &&
             (typeof reactElement === 'string' || typeof reactElement === 'number');
     }
 
-    static getChildrenAsArray(props) {
+    static getChildrenAsArray(props): Array<ReactElement> {
         const { children = [] } = props || {};
         return !Array.isArray(children) ? [children] : children;
     }
 
-    static setAttributes(domNode, nextProps = {}, prevProps = {}) {
+    static setAttributes(domNode, nextProps:any = {}, prevProps:any = {}) {
         const {
             className: prevClass,
             style: prevStyle = {},
@@ -89,7 +91,7 @@ export default class VDomNode {
         });
     }
 
-    static buildDomNode(reactElement) {
+    static buildDomNode(reactElement: ReactElement) {
         if (VDomNode.isEmpty(reactElement)) {
             return document.createTextNode(''); // Empty node
         }
@@ -102,14 +104,17 @@ export default class VDomNode {
             type,
             props,
         } = reactElement;
-
-        const domNode = document.createElement(type);
+        const domNode = document.createElement(type as keyof HTMLElementTagNameMap);
         VDomNode.setAttributes(domNode, props);
 
         return domNode;
     }
 
-    constructor(reactElement) {
+    private currentReactElement: ReactElement;
+    private domNode: null | HTMLElement | Text;
+    private childrenVNodes: Array<VDomNode | VCompositeNode>;
+
+    constructor(reactElement: ReactElement) {
         this.currentReactElement = reactElement;
         this.domNode = null;
         this.childrenVNodes = [];
@@ -127,22 +132,12 @@ export default class VDomNode {
         return this.currentReactElement;
     }
 
-    update(nextReactElement) {
-        const {
-            props: prevProps = {},
-        } = this.currentReactElement || {};
+    update(nextReactElement: ReactElement) {
+        const prevProps = this.currentReactElement.props;
+        const nextProps = nextReactElement.props;
 
-        const {
-            children: currentChildren = {},
-        } = prevProps;
-
-        const {
-            props: nextProps = {},
-        } = nextReactElement || {};
-
-        const {
-            children: nextChildren = []
-        } = nextProps;
+        const currentChildren = VDomNode.getChildrenAsArray(prevProps);
+        const nextChildren = VDomNode.getChildrenAsArray(nextProps);
 
         const nextChildrenVNodes = [];
         const maxSize = Math.max(nextChildren.length, currentChildren.length);
